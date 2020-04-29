@@ -381,6 +381,14 @@ function template_j2cli() {
   output="$2"
   temp_file="${output}.$$.$RANDOM"
 
+  if [ -f $HOME/.config/yadm/Makefile -a -f $HOME/.config/yadm/gather_data.sh ]; then
+    echo "Using local system information from $HOME/.config/yadm/gather_data.sh"
+    pushd $HOME/.config/yadm/ > /dev/null
+    make local_data_cache.sh > /dev/null
+    source ./local_data_cache.sh
+    popd > /dev/null
+  fi
+
   YADM_CLASS="$local_class"   \
   YADM_OS="$local_system"     \
   YADM_HOSTNAME="$local_host" \
