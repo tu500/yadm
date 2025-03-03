@@ -313,6 +313,16 @@ function template() {
   local input="$2"
   local output="$3"
 
+  CUSTOM_DATA_GENERATOR="$HOME/.config/yadm/write_custom_template_data"
+  CUSTOM_DATA_TARGET="$HOME/.local/state/yadm/custom_template_data"
+
+  # Read custom environment data
+  [ -x "$CUSTOM_DATA_GENERATOR" ] && "$CUSTOM_DATA_GENERATOR" "$CUSTOM_DATA_TARGET"
+  if [ -f "$CUSTOM_DATA_TARGET" ]; then
+    echo "Found and loading custom template data"
+    source "$CUSTOM_DATA_TARGET"
+  fi
+
   local content
   if ! content=$("template_$processor" "$input"); then
     echo "Error: failed to process template '$input'" >&2
